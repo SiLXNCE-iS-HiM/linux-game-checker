@@ -147,6 +147,25 @@
   </footer>
 </div>
 
+<!-- Game Detail Modal -->
+<div class="suggest-modal" id="game-modal">
+  <div class="suggest-box" style="max-width:500px;">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px;">
+      <div>
+        <div id="modal-name" style="font-size:1.3rem;font-weight:500;margin-bottom:4px;"></div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;" id="modal-badges"></div>
+      </div>
+      <button onclick="closeGameModal()" style="background:transparent;border:none;color:var(--muted);font-size:20px;cursor:pointer;padding:0 4px;">✕</button>
+    </div>
+    <div id="modal-meta" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px;"></div>
+    <div id="modal-desc" style="font-size:14px;color:var(--muted);line-height:1.7;min-height:80px;">
+      <div id="modal-loading" style="display:none;color:var(--muted);font-size:13px;">Generating description...</div>
+      <div id="modal-text"></div>
+    </div>
+    <div style="margin-top:16px;display:flex;gap:8px;" id="modal-actions"></div>
+  </div>
+</div>
+
 <!-- Suggest Modal -->
 <div class="suggest-modal" id="suggest-modal">
   <div class="suggest-box">
@@ -799,7 +818,7 @@
     const isOwned = owned.has(g.name);
     const safeName = g.name.replace(/'/g, "\\'").replace(/"/g, '&quot;');
     return `
-      <div class="card" onclick="addRecent('${safeName}')">
+      <div class="card" onclick="openGameModal(${JSON.stringify(g).replace(/"/g,'&quot;')})" style="cursor:pointer;">
         <div class="card-top">
           <div class="card-name">${g.name}</div>
           <span class="badge ${g.type}">${labels[g.type]}</span>
@@ -813,6 +832,94 @@
         </div>
       </div>`;
   }
+
+  // Game detail modal
+  const gameInfo = {
+    "CS2": {year:"2023",developer:"Valve",platform:"Steam",metacritic:"83"},
+    "Dota 2": {year:"2013",developer:"Valve",platform:"Steam",metacritic:"90"},
+    "Team Fortress 2": {year:"2007",developer:"Valve",platform:"Steam",metacritic:"92"},
+    "Minecraft Java": {year:"2011",developer:"Mojang",platform:"Steam/Direct",metacritic:"96"},
+    "Stardew Valley": {year:"2016",developer:"ConcernedApe",platform:"Steam",metacritic:"89"},
+    "Terraria": {year:"2011",developer:"Re-Logic",platform:"Steam",metacritic:"83"},
+    "Hollow Knight": {year:"2017",developer:"Team Cherry",platform:"Steam",metacritic:"87"},
+    "Hades": {year:"2020",developer:"Supergiant Games",platform:"Steam",metacritic:"93"},
+    "Baldur's Gate 3": {year:"2023",developer:"Larian Studios",platform:"Steam",metacritic:"96"},
+    "Elden Ring": {year:"2022",developer:"FromSoftware",platform:"Steam",metacritic:"96"},
+    "Cyberpunk 2077": {year:"2020",developer:"CD Projekt Red",platform:"Steam",metacritic:"86"},
+    "GTA V": {year:"2013",developer:"Rockstar Games",platform:"Steam",metacritic:"97"},
+    "The Witcher 3": {year:"2015",developer:"CD Projekt Red",platform:"Steam",metacritic:"93"},
+    "Red Dead Redemption 2": {year:"2018",developer:"Rockstar Games",platform:"Steam",metacritic:"97"},
+    "God of War": {year:"2022",developer:"Santa Monica Studio",platform:"Steam",metacritic:"94"},
+    "Fortnite": {year:"2017",developer:"Epic Games",platform:"Epic",metacritic:"81"},
+    "Valorant": {year:"2020",developer:"Riot Games",platform:"Riot",metacritic:"80"},
+    "Apex Legends": {year:"2019",developer:"Respawn Entertainment",platform:"EA",metacritic:"89"},
+    "Rocket League": {year:"2015",developer:"Psyonix",platform:"Epic",metacritic:"86"},
+    "Among Us": {year:"2018",developer:"Innersloth",platform:"Steam",metacritic:"85"},
+  };
+
+  let currentModalGame = null;
+
+  async function openGameModal(g) {
+    currentModalGame = g;
+    addRecent(g.name);
+    const labels = {native:'Native',proton:'Via Proton',blocked:'Blocked',cloud:'Cloud only'};
+    const colors = {native:'var(--native)',proton:'var(--proton)',blocked:'var(--blocked)',cloud:'var(--cloud)'};
+    const bg = {native:'rgba(34,197,94,0.15)',proton:'rgba(59,130,246,0.15)',blocked:'rgba(239,68,68,0.15)',cloud:'rgba(245,158,11,0.15)'};
+
+    document.getElementById('modal-name').textContent = g.name;
+    document.getElementById('modal-badges').innerHTML = `
+      <span class="badge ${g.type}">${labels[g.type]}</span>
+      <span style="font-size:11px;padding:3px 10px;border-radius:99px;background:var(--surface);border:1px solid var(--border);color:var(--muted);">${g.genre}</span>`;
+
+    const info = gameInfo[g.name] || {};
+    document.getElementById('modal-meta').innerHTML = [
+      info.developer ? `<div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px 14px;"><div style="font-size:11px;color:var(--muted);margin-bottom:3px;">Developer</div><div style="font-size:13px;font-weight:500;">${info.developer}</div></div>` : '',
+      info.year ? `<div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px 14px;"><div style="font-size:11px;color:var(--muted);margin-bottom:3px;">Release year</div><div style="font-size:13px;font-weight:500;">${info.year}</div></div>` : '',
+      info.platform ? `<div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px 14px;"><div style="font-size:11px;color:var(--muted);margin-bottom:3px;">Platform</div><div style="font-size:13px;font-weight:500;">${info.platform}</div></div>` : '',
+      info.metacritic ? `<div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px 14px;"><div style="font-size:11px;color:var(--muted);margin-bottom:3px;">Metacritic</div><div style="font-size:13px;font-weight:500;color:#f59e0b;">${info.metacritic}/100</div></div>` : '',
+    ].join('');
+
+    const isFav = favourites.has(g.name);
+    const isOwned = owned.has(g.name);
+    const safeName = g.name.replace(/'/g,"\\'");
+    document.getElementById('modal-actions').innerHTML = `
+      <button class="action-btn ${isFav?'fav-active':''}" id="modal-fav-btn" onclick="toggleFav('${safeName}',this)">${isFav?'♥ Favourited':'♡ Favourite'}</button>
+      <button class="action-btn ${isOwned?'own-active':''}" id="modal-own-btn" onclick="toggleOwn('${safeName}',this)">${isOwned?'✓ Owned':'✓ I own this'}</button>`;
+
+    document.getElementById('game-modal').classList.add('open');
+    document.getElementById('modal-text').textContent = '';
+    document.getElementById('modal-loading').style.display = 'block';
+
+    try {
+      const res = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({
+          model: 'claude-sonnet-4-20250514',
+          max_tokens: 1000,
+          messages: [{
+            role: 'user',
+            content: `Write a 2-3 sentence description of the game "${g.name}" (${g.genre}). Be concise and informative. Just the description, no preamble.`
+          }]
+        })
+      });
+      const data = await res.json();
+      const text = data.content?.[0]?.text || 'No description available.';
+      document.getElementById('modal-loading').style.display = 'none';
+      document.getElementById('modal-text').textContent = text;
+    } catch(e) {
+      document.getElementById('modal-loading').style.display = 'none';
+      document.getElementById('modal-text').textContent = `${g.name} is a ${g.genre} game. ${g.note}.`;
+    }
+  }
+
+  function closeGameModal() {
+    document.getElementById('game-modal').classList.remove('open');
+  }
+
+  document.getElementById('game-modal').addEventListener('click', function(e) {
+    if (e.target === this) closeGameModal();
+  });
 
   function renderRecent() {
     const section = document.getElementById('recently-section');
@@ -887,4 +994,5 @@
   render();
 </script>
 </body>
+</html>
 </html>
