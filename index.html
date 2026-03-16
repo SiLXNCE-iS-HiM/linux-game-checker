@@ -25,26 +25,33 @@
     .header-left h1 { font-family: 'JetBrains Mono', monospace; font-size: 2rem; font-weight: 500; margin-bottom: 0.4rem; }
     .header-left h1 span { color: var(--accent); }
     .header-left p { color: var(--muted); font-size: 0.95rem; }
+    .header-right { display: flex; gap: 8px; flex-wrap: wrap; }
     .toggle-btn { background: var(--toggle-bg); border: 1px solid var(--border); border-radius: 99px; padding: 6px 14px; cursor: pointer; font-size: 13px; color: var(--text); font-family: 'Inter', sans-serif; display: flex; align-items: center; gap: 6px; transition: all 0.15s; white-space: nowrap; }
     .toggle-btn:hover { border-color: var(--accent); }
-    .search-row { display: flex; gap: 10px; margin-bottom: 1.25rem; }
+    .search-row { display: flex; gap: 10px; margin-bottom: 1rem; }
     .search-row input { flex: 1; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 11px 16px; color: var(--text); font-size: 15px; font-family: 'Inter', sans-serif; outline: none; transition: border-color 0.2s; }
     .search-row input:focus { border-color: var(--accent); }
     .search-row input::placeholder { color: var(--muted); }
+    .controls-row { display: flex; gap: 10px; margin-bottom: 1.25rem; flex-wrap: wrap; align-items: center; }
+    select { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 8px 14px; color: var(--text); font-size: 13px; font-family: 'Inter', sans-serif; outline: none; cursor: pointer; transition: border-color 0.2s; }
+    select:hover { border-color: var(--accent); }
+    .result-count { font-size: 13px; color: var(--muted); margin-left: auto; }
     .filters { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 1.75rem; }
     .filter-btn { padding: 6px 16px; border-radius: 99px; border: 1px solid var(--border); background: transparent; color: var(--muted); font-size: 13px; cursor: pointer; font-family: 'Inter', sans-serif; transition: all 0.15s; }
     .filter-btn:hover { border-color: var(--muted); color: var(--text); }
     .filter-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; }
     .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 1.75rem; }
-    .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; }
+    .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; cursor: pointer; transition: border-color 0.15s; }
+    .stat-card:hover { border-color: var(--muted); }
     .stat-num { font-size: 1.6rem; font-weight: 600; }
     .stat-label { font-size: 12px; color: var(--muted); margin-top: 2px; }
     .stat-card.native .stat-num { color: var(--native); }
     .stat-card.proton .stat-num { color: var(--proton); }
     .stat-card.cloud .stat-num { color: var(--cloud); }
     .stat-card.blocked .stat-num { color: var(--blocked); }
+    .section-title { font-size: 13px; color: var(--muted); margin-bottom: 10px; font-weight: 500; }
     .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)); gap: 10px; }
-    .card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 16px; transition: border-color 0.15s; }
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 16px; transition: border-color 0.15s; position: relative; }
     .card:hover { border-color: var(--muted); }
     .card-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 6px; gap: 8px; }
     .card-name { font-size: 15px; font-weight: 500; color: var(--text); }
@@ -53,9 +60,14 @@
     .badge.proton { background: rgba(59,130,246,0.15); color: var(--proton); }
     .badge.blocked { background: rgba(239,68,68,0.15); color: var(--blocked); }
     .badge.cloud { background: rgba(245,158,11,0.15); color: var(--cloud); }
-    .card-genre { font-size: 12px; color: var(--muted); margin-bottom: 4px; }
+    .card-genre { font-size: 12px; color: var(--muted); margin-bottom: 6px; }
     .card-note { font-size: 12px; color: var(--card-note); }
+    .card-actions { display: flex; gap: 6px; margin-top: 10px; }
+    .copy-btn { font-size: 11px; padding: 3px 10px; border-radius: 99px; border: 1px solid var(--border); background: transparent; color: var(--muted); cursor: pointer; font-family: 'Inter', sans-serif; transition: all 0.15s; }
+    .copy-btn:hover { border-color: var(--accent); color: var(--accent); }
+    .copy-btn.copied { border-color: var(--native); color: var(--native); }
     .empty { text-align: center; padding: 4rem; color: var(--muted); font-size: 14px; grid-column: 1/-1; }
+    .recently-section { margin-bottom: 2rem; }
     footer { margin-top: 3rem; text-align: center; color: var(--muted); font-size: 12px; }
     footer a { color: var(--accent); text-decoration: none; }
     @media (max-width: 500px) {
@@ -71,11 +83,27 @@
       <h1>Linux <span>Game</span> Checker</h1>
       <p>Find out if your favourite games run on Linux — native, via Proton, or cloud only.</p>
     </div>
-    <button class="toggle-btn" onclick="toggleTheme()" id="theme-btn">☀️ Light mode</button>
+    <div class="header-right">
+      <button class="toggle-btn" onclick="toggleTheme()" id="theme-btn">☀️ Light mode</button>
+    </div>
   </header>
+
   <div class="search-row">
     <input type="text" id="search" placeholder="Search by game name or genre..." oninput="render()" />
   </div>
+
+  <div class="controls-row">
+    <select id="genre-filter" onchange="render()">
+      <option value="all">All genres</option>
+    </select>
+    <select id="sort-select" onchange="render()">
+      <option value="default">Default order</option>
+      <option value="az">A → Z</option>
+      <option value="za">Z → A</option>
+    </select>
+    <span class="result-count" id="result-count"></span>
+  </div>
+
   <div class="filters">
     <button class="filter-btn active" onclick="setFilter('all',this)">All</button>
     <button class="filter-btn" onclick="setFilter('native',this)">Native</button>
@@ -83,17 +111,27 @@
     <button class="filter-btn" onclick="setFilter('cloud',this)">Cloud only</button>
     <button class="filter-btn" onclick="setFilter('blocked',this)">Blocked</button>
   </div>
+
   <div class="stats">
-    <div class="stat-card native"><div class="stat-num" id="s-native">0</div><div class="stat-label">Native</div></div>
-    <div class="stat-card proton"><div class="stat-num" id="s-proton">0</div><div class="stat-label">Via Proton</div></div>
-    <div class="stat-card cloud"><div class="stat-num" id="s-cloud">0</div><div class="stat-label">Cloud only</div></div>
-    <div class="stat-card blocked"><div class="stat-num" id="s-blocked">0</div><div class="stat-label">Blocked</div></div>
+    <div class="stat-card native" onclick="setFilterById('native')"><div class="stat-num" id="s-native">0</div><div class="stat-label">Native</div></div>
+    <div class="stat-card proton" onclick="setFilterById('proton')"><div class="stat-num" id="s-proton">0</div><div class="stat-label">Via Proton</div></div>
+    <div class="stat-card cloud" onclick="setFilterById('cloud')"><div class="stat-num" id="s-cloud">0</div><div class="stat-label">Cloud only</div></div>
+    <div class="stat-card blocked" onclick="setFilterById('blocked')"><div class="stat-num" id="s-blocked">0</div><div class="stat-label">Blocked</div></div>
   </div>
+
+  <div id="recently-section" class="recently-section" style="display:none">
+    <div class="section-title">Recently viewed</div>
+    <div class="grid" id="recently-grid"></div>
+    <br/>
+  </div>
+
   <div class="grid" id="grid"></div>
+
   <footer>
     <p>Built by <a href="https://github.com/SiLXNCE-iS-HiM" target="_blank">SiLXNCE-iS-HiM</a> &mdash; data sourced from <a href="https://www.protondb.com" target="_blank">ProtonDB</a></p>
   </footer>
 </div>
+
 <script>
   const games = [
     {name:"CS2",type:"native",genre:"FPS",note:"Runs perfectly via Steam"},
@@ -103,7 +141,7 @@
     {name:"Stardew Valley",type:"native",genre:"Sim",note:"Official Linux support"},
     {name:"Terraria",type:"native",genre:"Sandbox",note:"Official Linux support"},
     {name:"Among Us",type:"native",genre:"Party",note:"Official Linux support"},
-    {name:"Hollow Knight",type:"native",genre:"Platformer",note:"Official Linux support"},
+    {name:"Hollow Knight",type:"native",genre:"Metroidvania",note:"Official Linux support"},
     {name:"Hades",type:"native",genre:"Roguelike",note:"Official Linux support"},
     {name:"Rocket League",type:"native",genre:"Sports",note:"Fully native Linux support"},
     {name:"Portal 2",type:"native",genre:"Puzzle",note:"Fully native Linux support"},
@@ -118,14 +156,14 @@
     {name:"Baldur's Gate 3",type:"native",genre:"RPG",note:"Official Linux support — runs perfectly"},
     {name:"Hades 2",type:"native",genre:"Roguelike",note:"Official Linux support"},
     {name:"Disco Elysium",type:"native",genre:"RPG",note:"Official Linux support"},
-    {name:"Into the Breach",type:"native",genre:"Strategy",note:"Official Linux support"},
+    {name:"Into the Breach",type:"native",genre:"Turn Based Strategy",note:"Official Linux support"},
     {name:"Spelunky 2",type:"native",genre:"Platformer",note:"Official Linux support"},
     {name:"Hyper Light Drifter",type:"native",genre:"Action",note:"Official Linux support"},
     {name:"FTL Faster Than Light",type:"native",genre:"Strategy",note:"Official Linux support"},
     {name:"Darkest Dungeon",type:"native",genre:"Roguelike",note:"Official Linux support"},
     {name:"Arma 3",type:"native",genre:"Sim",note:"Official Linux support"},
-    {name:"Cities Skylines",type:"native",genre:"Strategy",note:"Official Linux support"},
-    {name:"Hollow Knight Silksong",type:"native",genre:"Platformer",note:"Official Linux support confirmed"},
+    {name:"Cities Skylines",type:"native",genre:"City Builder",note:"Official Linux support"},
+    {name:"Hollow Knight Silksong",type:"native",genre:"Metroidvania",note:"Official Linux support confirmed"},
     {name:"Ultrakill",type:"native",genre:"FPS",note:"Official Linux support"},
     {name:"Noita",type:"native",genre:"Roguelike",note:"Official Linux support"},
     {name:"20 Minutes Till Dawn",type:"native",genre:"Roguelike",note:"Official Linux support"},
@@ -150,10 +188,9 @@
     {name:"Webbed",type:"native",genre:"Platformer",note:"Official Linux support"},
     {name:"A Short Hike",type:"native",genre:"Adventure",note:"Official Linux support"},
     {name:"Night in the Woods",type:"native",genre:"Adventure",note:"Official Linux support"},
-    {name:"Chicory A Colorful Tale",type:"native",genre:"Adventure",note:"Official Linux support"},
     {name:"Shovel Knight",type:"native",genre:"Platformer",note:"Official Linux support"},
-    {name:"Axiom Verge",type:"native",genre:"Platformer",note:"Official Linux support"},
-    {name:"Axiom Verge 2",type:"native",genre:"Platformer",note:"Official Linux support"},
+    {name:"Axiom Verge",type:"native",genre:"Metroidvania",note:"Official Linux support"},
+    {name:"Axiom Verge 2",type:"native",genre:"Metroidvania",note:"Official Linux support"},
     {name:"Tails of Iron",type:"native",genre:"Action",note:"Official Linux support"},
     {name:"Pepper Grinder",type:"native",genre:"Platformer",note:"Official Linux support"},
     {name:"Blasphemous",type:"native",genre:"Platformer",note:"Official Linux support"},
@@ -199,7 +236,9 @@
     {name:"Dicey Dungeons",type:"native",genre:"Roguelike",note:"Official Linux support"},
     {name:"Fights in Tight Spaces",type:"native",genre:"Strategy",note:"Official Linux support"},
     {name:"Civilization 6",type:"native",genre:"Strategy",note:"Official Linux support"},
-    {name:"XCOM 2",type:"native",genre:"Strategy",note:"Official Linux support"},
+    {name:"XCOM 2",type:"native",genre:"Turn Based Strategy",note:"Official Linux support"},
+    {name:"XCOM Enemy Unknown",type:"native",genre:"Turn Based Strategy",note:"Official Linux support"},
+    {name:"XCOM Chimera Squad",type:"native",genre:"Turn Based Strategy",note:"Official Linux support"},
     {name:"Total War Warhammer 3",type:"native",genre:"Strategy",note:"Official Linux support"},
     {name:"Crusader Kings 3",type:"native",genre:"Strategy",note:"Official Linux support"},
     {name:"Europa Universalis 4",type:"native",genre:"Strategy",note:"Official Linux support"},
@@ -218,6 +257,117 @@
     {name:"Kerbal Space Program",type:"native",genre:"Sim",note:"Official Linux support"},
     {name:"American Truck Simulator",type:"native",genre:"Sim",note:"Official Linux support"},
     {name:"Football Manager 2024",type:"native",genre:"Sports",note:"Official Linux support"},
+    {name:"Football Manager 2025",type:"native",genre:"Sports",note:"Official Linux support"},
+    {name:"Yakuza 0",type:"native",genre:"Action",note:"Official Linux support"},
+    {name:"Yakuza Kiwami",type:"native",genre:"Action",note:"Official Linux support"},
+    {name:"Yakuza Kiwami 2",type:"native",genre:"Action",note:"Official Linux support"},
+    {name:"Weird West",type:"native",genre:"RPG",note:"Official Linux support"},
+    {name:"Backbone",type:"native",genre:"Adventure",note:"Official Linux support"},
+    {name:"Spiritfall",type:"native",genre:"Platformer",note:"Official Linux support"},
+    {name:"Skul The Hero Slayer",type:"native",genre:"Roguelike",note:"Official Linux support"},
+    {name:"Curse of the Dead Gods",type:"native",genre:"Roguelike",note:"Official Linux support"},
+    {name:"Ravenswatch",type:"native",genre:"Roguelike",note:"Official Linux support"},
+    {name:"Windblown",type:"native",genre:"Roguelike",note:"Official Linux support"},
+    {name:"Children of the Sun",type:"native",genre:"Puzzle",note:"Official Linux support"},
+    {name:"Botany Manor",type:"native",genre:"Puzzle",note:"Official Linux support"},
+    {name:"Lil Gator Game",type:"native",genre:"Adventure",note:"Official Linux support"},
+    {name:"Venba",type:"native",genre:"Adventure",note:"Official Linux support"},
+    {name:"Stray",type:"native",genre:"Adventure",note:"Official Linux support"},
+    {name:"Planet of Lana",type:"native",genre:"Platformer",note:"Official Linux support"},
+    {name:"Rollerdrome",type:"native",genre:"Action",note:"Official Linux support"},
+    {name:"Cocoon",type:"native",genre:"Puzzle",note:"Official Linux support"},
+    {name:"Final Fantasy XIV",type:"native",genre:"MMORPG",note:"Official Linux support"},
+    {name:"RuneScape",type:"native",genre:"MMORPG",note:"Official Linux support"},
+    {name:"Old School RuneScape",type:"native",genre:"MMORPG",note:"Official Linux support"},
+    {name:"Ori and the Blind Forest",type:"native",genre:"Metroidvania",note:"Official Linux support"},
+    {name:"Guacamelee 2",type:"native",genre:"Metroidvania",note:"Official Linux support"},
+    {name:"Bloodstained Ritual of the Night",type:"native",genre:"Metroidvania",note:"Official Linux support"},
+    {name:"Ender Lilies",type:"native",genre:"Metroidvania",note:"Official Linux support"},
+    {name:"Ender Magnolia",type:"native",genre:"Metroidvania",note:"Official Linux support"},
+    {name:"Salt and Sanctuary",type:"native",genre:"Metroidvania",note:"Official Linux support"},
+    {name:"Grime",type:"native",genre:"Metroidvania",note:"Official Linux support"},
+    {name:"Nine Sols",type:"native",genre:"Metroidvania",note:"Official Linux support"},
+    {name:"Divinity Original Sin 2",type:"native",genre:"Turn Based Strategy",note:"Official Linux support"},
+    {name:"Wasteland 3",type:"native",genre:"Turn Based Strategy",note:"Official Linux support"},
+    {name:"Shadowrun Returns",type:"native",genre:"Turn Based Strategy",note:"Official Linux support"},
+    {name:"Wargroove",type:"native",genre:"Turn Based Strategy",note:"Official Linux support"},
+    {name:"Wargroove 2",type:"native",genre:"Turn Based Strategy",note:"Official Linux support"},
+    {name:"SimCity 4",type:"native",genre:"City Builder",note:"Official Linux support"},
+    {name:"Workers and Resources Soviet Republic",type:"native",genre:"City Builder",note:"Official Linux support"},
+    {name:"Tropico 6",type:"native",genre:"City Builder",note:"Official Linux support"},
+    {name:"Surviving Mars",type:"native",genre:"City Builder",note:"Official Linux support"},
+    {name:"Foundation",type:"native",genre:"City Builder",note:"Official Linux support"},
+    {name:"Timberborn",type:"native",genre:"City Builder",note:"Official Linux support"},
+    {name:"Against the Storm",type:"native",genre:"City Builder",note:"Official Linux support"},
+    {name:"Shadowverse",type:"native",genre:"Card Game",note:"Official Linux support"},
+    {name:"Monster Train",type:"native",genre:"Card Game",note:"Official Linux support"},
+    {name:"Monster Train 2",type:"native",genre:"Card Game",note:"Official Linux support"},
+    {name:"Faeria",type:"native",genre:"Card Game",note:"Official Linux support"},
+    {name:"Crypt of the Necrodancer",type:"native",genre:"Rhythm",note:"Official Linux support"},
+    {name:"Thumper",type:"native",genre:"Rhythm",note:"Official Linux support"},
+    {name:"Muse Dash",type:"native",genre:"Rhythm",note:"Official Linux support"},
+    {name:"Spin Rhythm XD",type:"native",genre:"Rhythm",note:"Official Linux support"},
+    {name:"Bloons TD 6",type:"native",genre:"Tower Defense",note:"Official Linux support"},
+    {name:"Kingdom Rush Frontiers",type:"native",genre:"Tower Defense",note:"Official Linux support"},
+    {name:"Kingdom Rush Origins",type:"native",genre:"Tower Defense",note:"Official Linux support"},
+    {name:"Defense Grid 2",type:"native",genre:"Tower Defense",note:"Official Linux support"},
+    {name:"Plants vs Zombies GOTY",type:"native",genre:"Tower Defense",note:"Official Linux support"},
+    {name:"Mindustry",type:"native",genre:"Tower Defense",note:"Official Linux support"},
+    {name:"Ikaruga",type:"native",genre:"Bullet Hell",note:"Official Linux support"},
+    {name:"Enter the Gungeon",type:"native",genre:"Bullet Hell",note:"Official Linux support"},
+    {name:"Exit the Gungeon",type:"native",genre:"Bullet Hell",note:"Official Linux support"},
+    {name:"Geometry Wars 3",type:"native",genre:"Bullet Hell",note:"Official Linux support"},
+    {name:"Nex Machina",type:"native",genre:"Bullet Hell",note:"Official Linux support"},
+    {name:"Psychonauts",type:"native",genre:"Platformer",note:"Official Linux support"},
+    {name:"Broken Age",type:"native",genre:"Adventure",note:"Official Linux support"},
+    {name:"Grim Fandango Remastered",type:"native",genre:"Adventure",note:"Official Linux support"},
+    {name:"Thimbleweed Park",type:"native",genre:"Adventure",note:"Official Linux support"},
+    {name:"Oxenfree",type:"native",genre:"Adventure",note:"Official Linux support"},
+    {name:"Oxenfree 2",type:"native",genre:"Adventure",note:"Official Linux support"},
+    {name:"Gone Home",type:"native",genre:"Adventure",note:"Official Linux support"},
+    {name:"The Stanley Parable Ultra Deluxe",type:"native",genre:"Adventure",note:"Official Linux support"},
+    {name:"Return of the Obra Dinn",type:"native",genre:"Puzzle",note:"Official Linux support"},
+    {name:"The Talos Principle",type:"native",genre:"Puzzle",note:"Official Linux support"},
+    {name:"Myst",type:"native",genre:"Adventure",note:"Official Linux support"},
+    {name:"Firewatch",type:"native",genre:"Adventure",note:"Official Linux support"},
+    {name:"Citizen Sleeper",type:"native",genre:"RPG",note:"Official Linux support"},
+    {name:"Citizen Sleeper 2",type:"native",genre:"RPG",note:"Official Linux support"},
+    {name:"Coffee Talk",type:"native",genre:"Visual Novel",note:"Official Linux support"},
+    {name:"Coffee Talk Episode 2",type:"native",genre:"Visual Novel",note:"Official Linux support"},
+    {name:"Sea of Stars",type:"native",genre:"RPG",note:"Official Linux support"},
+    {name:"Chained Echoes",type:"native",genre:"RPG",note:"Official Linux support"},
+    {name:"Crosscode",type:"native",genre:"RPG",note:"Official Linux support"},
+    {name:"Transistor",type:"native",genre:"Action",note:"Official Linux support"},
+    {name:"Bastion",type:"native",genre:"Action",note:"Official Linux support"},
+    {name:"Pyre",type:"native",genre:"RPG",note:"Official Linux support"},
+    {name:"Endless Legend",type:"native",genre:"Strategy",note:"Official Linux support"},
+    {name:"Trine 4",type:"native",genre:"Platformer",note:"Official Linux support"},
+    {name:"Rogue Legacy",type:"native",genre:"Roguelike",note:"Official Linux support"},
+    {name:"Broforce",type:"native",genre:"Co-op",note:"Official Linux support"},
+    {name:"Verdun",type:"native",genre:"FPS",note:"Official Linux support"},
+    {name:"Tannenberg",type:"native",genre:"FPS",note:"Official Linux support"},
+    {name:"Isonzo",type:"native",genre:"FPS",note:"Official Linux support"},
+    {name:"Insurgency Sandstorm",type:"native",genre:"FPS",note:"Official Linux support"},
+    {name:"Grid 2019",type:"native",genre:"Racing",note:"Official Linux support"},
+    {name:"DiRT 4",type:"native",genre:"Racing",note:"Official Linux support"},
+    {name:"Trackmania",type:"native",genre:"Racing",note:"Official Linux support"},
+    {name:"rFactor 2",type:"native",genre:"Racing",note:"Official Linux support"},
+    {name:"BeamNG Drive",type:"native",genre:"Racing",note:"Official Linux support"},
+    {name:"Assetto Corsa",type:"native",genre:"Racing",note:"Official Linux support"},
+    {name:"Wreckfest",type:"native",genre:"Racing",note:"Official Linux support"},
+    {name:"DiRT Rally 2",type:"native",genre:"Racing",note:"Official Linux support"},
+    {name:"Descenders",type:"native",genre:"Racing",note:"Official Linux support"},
+    {name:"Golf With Your Friends",type:"native",genre:"Sports",note:"Official Linux support"},
+    {name:"Golf It",type:"native",genre:"Sports",note:"Official Linux support"},
+    {name:"Doki Doki Literature Club",type:"native",genre:"Visual Novel",note:"Official Linux support"},
+    {name:"VA-11 Hall-A",type:"native",genre:"Visual Novel",note:"Official Linux support"},
+    {name:"Undertale",type:"native",genre:"RPG",note:"Official Linux support"},
+    {name:"Deltarune",type:"native",genre:"RPG",note:"Official Linux support"},
+    {name:"Omori",type:"native",genre:"RPG",note:"Official Linux support"},
+    {name:"Rogue Legacy 2",type:"native",genre:"Roguelike",note:"Official Linux support"},
+    {name:"Children of Morta",type:"native",genre:"RPG",note:"Official Linux support"},
+    {name:"Freedom Planet 2",type:"native",genre:"Platformer",note:"Official Linux support"},
+    {name:"Narita Boy",type:"native",genre:"Platformer",note:"Official Linux support"},
     {name:"GTA V",type:"proton",genre:"Action",note:"Via Proton on Steam"},
     {name:"Red Dead Redemption 2",type:"proton",genre:"Action",note:"Via Proton on Steam"},
     {name:"Cyberpunk 2077",type:"proton",genre:"RPG",note:"Via Proton on Steam"},
@@ -240,11 +390,11 @@
     {name:"Hogwarts Legacy",type:"proton",genre:"RPG",note:"Via Proton on Steam"},
     {name:"Jedi Survivor",type:"proton",genre:"Action",note:"Via Proton on Steam"},
     {name:"A Plague Tale Requiem",type:"proton",genre:"Action",note:"Via Proton on Steam"},
+    {name:"A Plague Tale Innocence",type:"proton",genre:"Action",note:"Via Proton on Steam"},
     {name:"DayZ",type:"proton",genre:"Survival",note:"Via Proton on Steam"},
-    {name:"Cities Skylines 2",type:"proton",genre:"Strategy",note:"Via Proton on Steam"},
+    {name:"Cities Skylines 2",type:"proton",genre:"City Builder",note:"Via Proton on Steam"},
     {name:"Darkest Dungeon 2",type:"proton",genre:"Roguelike",note:"Via Proton on Steam"},
     {name:"Tunic",type:"proton",genre:"Action",note:"Via Proton on Steam"},
-    {name:"Neon White",type:"proton",genre:"Action",note:"Via Proton on Steam"},
     {name:"Sifu",type:"proton",genre:"Action",note:"Via Proton on Steam"},
     {name:"Palworld",type:"proton",genre:"Survival",note:"Via Proton on Steam"},
     {name:"Gunfire Reborn",type:"proton",genre:"Roguelike",note:"Via Proton on Steam"},
@@ -269,6 +419,7 @@
     {name:"Spider-Man Remastered",type:"proton",genre:"Action",note:"Via Proton on Steam"},
     {name:"Spider-Man Miles Morales",type:"proton",genre:"Action",note:"Via Proton on Steam"},
     {name:"Horizon Zero Dawn",type:"proton",genre:"Action",note:"Via Proton on Steam"},
+    {name:"Horizon Forbidden West",type:"proton",genre:"Action",note:"Via Proton on Steam"},
     {name:"Detroit Become Human",type:"proton",genre:"Adventure",note:"Via Proton on Steam"},
     {name:"Beyond Two Souls",type:"proton",genre:"Adventure",note:"Via Proton on Steam"},
     {name:"Outer Wilds",type:"proton",genre:"Adventure",note:"Via Proton on Steam"},
@@ -276,28 +427,25 @@
     {name:"Dishonored 2",type:"proton",genre:"Action",note:"Via Proton on Steam"},
     {name:"Wolfenstein 2",type:"proton",genre:"FPS",note:"Via Proton on Steam"},
     {name:"FIFA 23",type:"proton",genre:"Sports",note:"Via Proton on Steam"},
+    {name:"FIFA 22",type:"proton",genre:"Sports",note:"Via Proton on Steam"},
+    {name:"FIFA 21",type:"proton",genre:"Sports",note:"Via Proton on Steam"},
+    {name:"FIFA 20",type:"proton",genre:"Sports",note:"Via Proton on Steam"},
+    {name:"EA Sports FC 24",type:"proton",genre:"Sports",note:"Via Proton on Steam"},
     {name:"Need for Speed Heat",type:"proton",genre:"Racing",note:"Via Proton on Steam"},
-    {name:"Viewfinder",type:"proton",genre:"Puzzle",note:"Via Proton on Steam"},
-    {name:"The Forgotten City",type:"proton",genre:"Adventure",note:"Via Proton on Steam"},
+    {name:"Need for Speed Most Wanted 2012",type:"proton",genre:"Racing",note:"Via Proton on Steam"},
+    {name:"Need for Speed Unbound",type:"proton",genre:"Racing",note:"Via Proton on Steam"},
     {name:"PowerWash Simulator",type:"proton",genre:"Casual",note:"Via Proton on Steam"},
     {name:"Goat Simulator 3",type:"proton",genre:"Casual",note:"Via Proton on Steam"},
     {name:"Moving Out",type:"proton",genre:"Party",note:"Via Proton on Steam"},
-    {name:"Tools Up",type:"proton",genre:"Party",note:"Via Proton on Steam"},
-    {name:"Unravel Two",type:"proton",genre:"Platformer",note:"Via Proton on Steam"},
     {name:"A Way Out",type:"proton",genre:"Co-op",note:"Via Proton on Steam"},
     {name:"Little Nightmares 2",type:"proton",genre:"Horror",note:"Via Proton on Steam"},
     {name:"Subnautica Below Zero",type:"proton",genre:"Survival",note:"Via Proton on Steam"},
-    {name:"Breathedge",type:"proton",genre:"Survival",note:"Via Proton on Steam"},
-    {name:"My Time at Portia",type:"proton",genre:"Sim",note:"Via Proton on Steam"},
-    {name:"Coral Island",type:"proton",genre:"Sim",note:"Via Proton on Steam"},
-    {name:"Sun Haven",type:"proton",genre:"Sim",note:"Via Proton on Steam"},
     {name:"Planet Zoo",type:"proton",genre:"Sim",note:"Via Proton on Steam"},
     {name:"Planet Coaster",type:"proton",genre:"Sim",note:"Via Proton on Steam"},
     {name:"Cyberpunk 2077 Phantom Liberty",type:"proton",genre:"RPG",note:"Via Proton on Steam"},
     {name:"Path of Exile",type:"proton",genre:"RPG",note:"Via Proton on Steam"},
     {name:"Path of Exile 2",type:"proton",genre:"RPG",note:"Via Proton on Steam"},
     {name:"Back 4 Blood",type:"proton",genre:"Co-op",note:"Via Proton on Steam"},
-    {name:"Aliens Fireteam Elite",type:"proton",genre:"Co-op",note:"Via Proton on Steam"},
     {name:"Remnant 2",type:"proton",genre:"Co-op",note:"Via Proton on Steam"},
     {name:"Age of Wonders 4",type:"proton",genre:"Strategy",note:"Via Proton on Steam"},
     {name:"Warhammer 40K Space Marine 2",type:"proton",genre:"Action",note:"Via Proton on Steam"},
@@ -312,6 +460,13 @@
     {name:"Guilty Gear Strive",type:"proton",genre:"Fighting",note:"Via Proton on Steam"},
     {name:"Kingdom Come Deliverance 2",type:"proton",genre:"RPG",note:"Via Proton on Steam"},
     {name:"Like a Dragon Pirate Yakuza",type:"proton",genre:"Action",note:"Via Proton on Steam"},
+    {name:"Like a Dragon Ishin",type:"proton",genre:"Action",note:"Via Proton on Steam"},
+    {name:"Like a Dragon Infinite Wealth",type:"proton",genre:"RPG",note:"Via Proton on Steam"},
+    {name:"Yakuza Like a Dragon",type:"proton",genre:"RPG",note:"Via Proton on Steam"},
+    {name:"Yakuza 3 Remastered",type:"proton",genre:"Action",note:"Via Proton on Steam"},
+    {name:"Yakuza 4 Remastered",type:"proton",genre:"Action",note:"Via Proton on Steam"},
+    {name:"Yakuza 5 Remastered",type:"proton",genre:"Action",note:"Via Proton on Steam"},
+    {name:"Yakuza 6",type:"proton",genre:"Action",note:"Via Proton on Steam"},
     {name:"Assassin's Creed Shadows",type:"proton",genre:"Action",note:"Via Proton on Steam"},
     {name:"Split Fiction",type:"proton",genre:"Co-op",note:"Via Proton on Steam"},
     {name:"Civilization 7",type:"proton",genre:"Strategy",note:"Via Proton on Steam"},
@@ -322,6 +477,80 @@
     {name:"Atomfall",type:"proton",genre:"FPS",note:"Via Proton on Steam"},
     {name:"Expedition 33",type:"proton",genre:"RPG",note:"Via Proton on Steam"},
     {name:"Elden Ring Nightreign",type:"proton",genre:"Co-op",note:"Via Proton on Steam"},
+    {name:"Alan Wake 2",type:"proton",genre:"Horror",note:"Via Proton on Steam"},
+    {name:"Armored Core 6",type:"proton",genre:"Action",note:"Via Proton on Steam"},
+    {name:"Final Fantasy 7 Remake",type:"proton",genre:"RPG",note:"Via Proton on Steam"},
+    {name:"Final Fantasy 7 Rebirth",type:"proton",genre:"RPG",note:"Via Proton on Steam"},
+    {name:"Final Fantasy 16",type:"proton",genre:"RPG",note:"Via Proton on Steam"},
+    {name:"Final Fantasy 15",type:"proton",genre:"RPG",note:"Via Proton on Steam"},
+    {name:"Ghost of Tsushima",type:"proton",genre:"Action",note:"Via Proton on Steam"},
+    {name:"Nioh 2",type:"proton",genre:"Action",note:"Via Proton on Steam"},
+    {name:"Wo Long Fallen Dynasty",type:"proton",genre:"Action",note:"Via Proton on Steam"},
+    {name:"Tales of Arise",type:"proton",genre:"RPG",note:"Via Proton on Steam"},
+    {name:"Dragon Quest XI",type:"proton",genre:"RPG",note:"Via Proton on Steam"},
+    {name:"Forza Horizon 4",type:"proton",genre:"Racing",note:"Via Proton on Steam"},
+    {name:"Burnout Paradise Remastered",type:"proton",genre:"Racing",note:"Via Proton on Steam"},
+    {name:"Snowrunner",type:"proton",genre:"Sim",note:"Via Proton on Steam"},
+    {name:"Deathloop",type:"proton",genre:"FPS",note:"Via Proton on Steam"},
+    {name:"Ghostwire Tokyo",type:"proton",genre:"Action",note:"Via Proton on Steam"},
+    {name:"Immortals Fenyx Rising",type:"proton",genre:"Action",note:"Via Proton on Steam"},
+    {name:"World of Warcraft",type:"proton",genre:"MMORPG",note:"Via Proton on Steam"},
+    {name:"Guild Wars 2",type:"proton",genre:"MMORPG",note:"Via Proton on Steam"},
+    {name:"Elder Scrolls Online",type:"proton",genre:"MMORPG",note:"Via Proton on Steam"},
+    {name:"New World",type:"proton",genre:"MMORPG",note:"Via Proton on Steam"},
+    {name:"Star Wars The Old Republic",type:"proton",genre:"MMORPG",note:"Via Proton on Steam"},
+    {name:"Anno 1800",type:"proton",genre:"City Builder",note:"Via Proton on Steam"},
+    {name:"Hearthstone",type:"proton",genre:"Card Game",note:"Via Proton on Steam"},
+    {name:"Legends of Runeterra",type:"proton",genre:"Card Game",note:"Via Proton on Steam"},
+    {name:"Magic The Gathering Arena",type:"proton",genre:"Card Game",note:"Via Proton on Steam"},
+    {name:"Gwent",type:"proton",genre:"Card Game",note:"Via Proton on Steam"},
+    {name:"Midnight Suns",type:"proton",genre:"Card Game",note:"Via Proton on Steam"},
+    {name:"Taiko no Tatsujin",type:"proton",genre:"Rhythm",note:"Via Proton on Steam"},
+    {name:"Hatsune Miku Project DIVA Mega Mix",type:"proton",genre:"Rhythm",note:"Via Proton on Steam"},
+    {name:"Orcs Must Die 3",type:"proton",genre:"Tower Defense",note:"Via Proton on Steam"},
+    {name:"Touhou Scarlet Curiosity",type:"proton",genre:"Bullet Hell",note:"Via Proton on Steam"},
+    {name:"Returnal",type:"proton",genre:"Bullet Hell",note:"Via Proton on Steam"},
+    {name:"The Witness",type:"proton",genre:"Puzzle",note:"Via Proton on Steam"},
+    {name:"The Talos Principle 2",type:"proton",genre:"Puzzle",note:"Via Proton on Steam"},
+    {name:"What Remains of Edith Finch",type:"proton",genre:"Adventure",note:"Via Proton on Steam"},
+    {name:"NBA 2K24",type:"proton",genre:"Sports",note:"Via Proton on Steam"},
+    {name:"NBA 2K25",type:"proton",genre:"Sports",note:"Via Proton on Steam"},
+    {name:"WWE 2K24",type:"proton",genre:"Sports",note:"Via Proton on Steam"},
+    {name:"Tony Hawk Pro Skater 1+2",type:"proton",genre:"Sports",note:"Via Proton on Steam"},
+    {name:"The Crew 2",type:"proton",genre:"Racing",note:"Via Proton on Steam"},
+    {name:"DiRT 5",type:"proton",genre:"Racing",note:"Via Proton on Steam"},
+    {name:"WRC Generations",type:"proton",genre:"Racing",note:"Via Proton on Steam"},
+    {name:"EA Sports WRC",type:"proton",genre:"Racing",note:"Via Proton on Steam"},
+    {name:"F1 24",type:"proton",genre:"Racing",note:"Via Proton on Steam"},
+    {name:"Automobilista 2",type:"proton",genre:"Racing",note:"Via Proton on Steam"},
+    {name:"iRacing",type:"proton",genre:"Racing",note:"Via Proton on Steam"},
+    {name:"Trials Rising",type:"proton",genre:"Racing",note:"Via Proton on Steam"},
+    {name:"Hot Wheels Unleashed 2",type:"proton",genre:"Racing",note:"Via Proton on Steam"},
+    {name:"Call of Duty 2",type:"proton",genre:"FPS",note:"Via Proton on Steam"},
+    {name:"Call of Duty 4 Modern Warfare",type:"proton",genre:"FPS",note:"Via Proton on Steam"},
+    {name:"Call of Duty World at War",type:"proton",genre:"FPS",note:"Via Proton on Steam"},
+    {name:"Call of Duty Modern Warfare 2 2009",type:"proton",genre:"FPS",note:"Via Proton on Steam"},
+    {name:"Call of Duty Black Ops 1",type:"proton",genre:"FPS",note:"Via Proton on Steam"},
+    {name:"Call of Duty Modern Warfare 3 2011",type:"proton",genre:"FPS",note:"Via Proton on Steam"},
+    {name:"Call of Duty Black Ops 2",type:"proton",genre:"FPS",note:"Via Proton on Steam"},
+    {name:"Call of Duty Ghosts",type:"proton",genre:"FPS",note:"Via Proton on Steam"},
+    {name:"Call of Duty Advanced Warfare",type:"proton",genre:"FPS",note:"Via Proton on Steam"},
+    {name:"Call of Duty Black Ops 3",type:"proton",genre:"FPS",note:"Via Proton on Steam"},
+    {name:"Call of Duty Infinite Warfare",type:"proton",genre:"FPS",note:"Via Proton on Steam"},
+    {name:"Call of Duty WW2",type:"proton",genre:"FPS",note:"Via Proton on Steam"},
+    {name:"Battlefield 1942",type:"proton",genre:"FPS",note:"Via Proton on Steam"},
+    {name:"Battlefield Vietnam",type:"proton",genre:"FPS",note:"Via Proton on Steam"},
+    {name:"Battlefield 2",type:"proton",genre:"FPS",note:"Via Proton on Steam"},
+    {name:"Battlefield 2142",type:"proton",genre:"FPS",note:"Via Proton on Steam"},
+    {name:"Battlefield Bad Company 2",type:"proton",genre:"FPS",note:"Via Proton on Steam"},
+    {name:"Hell Let Loose",type:"proton",genre:"FPS",note:"Via Proton on Steam"},
+    {name:"Squad",type:"proton",genre:"FPS",note:"Via Proton on Steam"},
+    {name:"Ready or Not",type:"proton",genre:"FPS",note:"Via Proton on Steam"},
+    {name:"Lego Star Wars Skywalker Saga",type:"proton",genre:"Adventure",note:"Via Proton on Steam"},
+    {name:"Star Wars Outlaws",type:"proton",genre:"Action",note:"Via Proton on Steam"},
+    {name:"The Texas Chain Saw Massacre",type:"proton",genre:"Horror",note:"Via Proton on Steam"},
+    {name:"Evil Dead The Game",type:"proton",genre:"Horror",note:"Via Proton on Steam"},
+    {name:"Robocop Rogue City",type:"proton",genre:"FPS",note:"Via Proton on Steam"},
     {name:"Fortnite",type:"blocked",genre:"Battle Royale",note:"EasyAntiCheat blocks Linux"},
     {name:"Valorant",type:"blocked",genre:"FPS",note:"Vanguard anti-cheat blocks Linux"},
     {name:"Roblox",type:"blocked",genre:"Sandbox",note:"No official Linux support"},
@@ -330,14 +559,20 @@
     {name:"Warhammer 40K Darktide",type:"blocked",genre:"Co-op",note:"Anti-cheat blocks Linux"},
     {name:"The Finals",type:"blocked",genre:"FPS",note:"Anti-cheat blocks Linux"},
     {name:"Call of Duty Warzone",type:"blocked",genre:"FPS",note:"Anti-cheat blocks Linux"},
+    {name:"Call of Duty Black Ops 4",type:"blocked",genre:"FPS",note:"Anti-cheat blocks Linux"},
+    {name:"Call of Duty Modern Warfare 2019",type:"blocked",genre:"FPS",note:"Anti-cheat blocks Linux"},
+    {name:"Call of Duty Black Ops Cold War",type:"blocked",genre:"FPS",note:"Anti-cheat blocks Linux"},
+    {name:"Call of Duty Vanguard",type:"blocked",genre:"FPS",note:"Anti-cheat blocks Linux"},
+    {name:"Call of Duty Modern Warfare 2 2022",type:"blocked",genre:"FPS",note:"Anti-cheat blocks Linux"},
+    {name:"Call of Duty Modern Warfare 3 2023",type:"blocked",genre:"FPS",note:"Anti-cheat blocks Linux"},
     {name:"Minecraft Bedrock",type:"blocked",genre:"Sandbox",note:"No Linux support — use Java Edition"},
     {name:"Escape from Tarkov",type:"blocked",genre:"FPS",note:"Anti-cheat blocks Linux"},
     {name:"Gotham Knights",type:"blocked",genre:"Action",note:"Anti-cheat blocks Linux"},
     {name:"Naraka Bladepoint",type:"blocked",genre:"Battle Royale",note:"Anti-cheat blocks Linux"},
     {name:"MultiVersus",type:"blocked",genre:"Fighting",note:"Anti-cheat blocks Linux"},
     {name:"Lost Ark",type:"blocked",genre:"RPG",note:"Anti-cheat blocks Linux"},
+    {name:"Black Desert Online",type:"blocked",genre:"MMORPG",note:"Anti-cheat blocks Linux"},
     {name:"Blue Protocol",type:"blocked",genre:"RPG",note:"Anti-cheat blocks Linux"},
-    {name:"Punishing Gray Raven",type:"blocked",genre:"Action",note:"No Linux support"},
     {name:"Tower of Fantasy",type:"blocked",genre:"RPG",note:"Anti-cheat blocks Linux"},
     {name:"Payday 3",type:"blocked",genre:"Co-op",note:"Anti-cheat blocks Linux"},
     {name:"Dead by Daylight",type:"blocked",genre:"Horror",note:"Anti-cheat blocks Linux"},
@@ -346,9 +581,20 @@
     {name:"Genshin Impact",type:"blocked",genre:"RPG",note:"Anti-cheat blocks Linux"},
     {name:"Ghost of Yotei",type:"blocked",genre:"Action",note:"PlayStation exclusive — no Linux support"},
     {name:"Death Stranding 2",type:"blocked",genre:"Action",note:"PlayStation exclusive — no Linux support"},
+    {name:"Suicide Squad Kill the Justice League",type:"blocked",genre:"Action",note:"Anti-cheat blocks Linux"},
+    {name:"Battlefield 3",type:"blocked",genre:"FPS",note:"EA anti-cheat blocks Linux"},
+    {name:"Battlefield 4",type:"blocked",genre:"FPS",note:"EA anti-cheat blocks Linux"},
+    {name:"Battlefield 1",type:"blocked",genre:"FPS",note:"EA anti-cheat blocks Linux"},
+    {name:"Battlefield 5",type:"blocked",genre:"FPS",note:"EA anti-cheat blocks Linux"},
+    {name:"Gran Turismo 7",type:"blocked",genre:"Racing",note:"PlayStation exclusive — no Linux support"},
+    {name:"eFootball 2025",type:"blocked",genre:"Sports",note:"Anti-cheat blocks Linux"},
+    {name:"Advance Wars Reboot Camp",type:"blocked",genre:"Turn Based Strategy",note:"Nintendo exclusive — no Linux"},
+    {name:"Fire Emblem Engage",type:"blocked",genre:"Turn Based Strategy",note:"Nintendo exclusive — no Linux"},
     {name:"Apex Legends",type:"cloud",genre:"Battle Royale",note:"Play via Xbox Cloud Gaming"},
     {name:"Black Ops 7",type:"cloud",genre:"FPS",note:"Play via Xbox Cloud Gaming"},
+    {name:"Call of Duty Black Ops 6",type:"cloud",genre:"FPS",note:"Play via Xbox Cloud Gaming"},
     {name:"FC 26",type:"cloud",genre:"Sports",note:"Play via Xbox Cloud Gaming"},
+    {name:"EA Sports FC 25",type:"cloud",genre:"Sports",note:"Play via Xbox Cloud Gaming"},
     {name:"Rainbow Six Siege",type:"cloud",genre:"FPS",note:"Play via Xbox Cloud Gaming"},
     {name:"Battlefield 2042",type:"cloud",genre:"FPS",note:"Play via Xbox Cloud Gaming"},
     {name:"Battlefield 6",type:"cloud",genre:"FPS",note:"Play via Xbox Cloud Gaming"},
@@ -356,11 +602,11 @@
     {name:"Sea of Thieves",type:"cloud",genre:"Adventure",note:"Play via Xbox Cloud Gaming"},
     {name:"It Takes Two",type:"cloud",genre:"Co-op",note:"Play via Xbox Cloud Gaming"},
     {name:"Forza Horizon 5",type:"cloud",genre:"Racing",note:"Play via Xbox Cloud Gaming"},
+    {name:"Forza Motorsport",type:"cloud",genre:"Racing",note:"Play via Xbox Cloud Gaming"},
+    {name:"The Crew Motorfest",type:"cloud",genre:"Racing",note:"Play via Xbox Cloud Gaming"},
     {name:"Minecraft Dungeons",type:"cloud",genre:"Co-op",note:"Play via Xbox Cloud Gaming"},
     {name:"Grounded",type:"cloud",genre:"Survival",note:"Play via Xbox Cloud Gaming"},
     {name:"Pentiment",type:"cloud",genre:"Adventure",note:"Play via Xbox Cloud Gaming"},
-    {name:"EA Sports FC 25",type:"cloud",genre:"Sports",note:"Play via Xbox Cloud Gaming"},
-    {name:"Forza Motorsport",type:"cloud",genre:"Racing",note:"Play via Xbox Cloud Gaming"},
     {name:"Fable",type:"cloud",genre:"RPG",note:"Play via Xbox Cloud Gaming"},
     {name:"Avowed",type:"cloud",genre:"RPG",note:"Play via Xbox Cloud Gaming"},
     {name:"Indiana Jones",type:"cloud",genre:"Adventure",note:"Play via Xbox Cloud Gaming"},
@@ -371,10 +617,36 @@
     {name:"South of Midnight",type:"cloud",genre:"Action",note:"Play via Xbox Cloud Gaming"},
     {name:"Doom The Dark Ages",type:"cloud",genre:"FPS",note:"Play via Xbox Cloud Gaming"},
     {name:"The Outer Worlds 2",type:"cloud",genre:"RPG",note:"Play via Xbox Cloud Gaming"},
-    {name:"Fable 2025",type:"cloud",genre:"RPG",note:"Play via Xbox Cloud Gaming"},
+    {name:"Redfall",type:"cloud",genre:"FPS",note:"Play via Xbox Cloud Gaming"},
+    {name:"UFC 5",type:"cloud",genre:"Sports",note:"Play via Xbox Cloud Gaming"},
+    {name:"MLB The Show 24",type:"cloud",genre:"Sports",note:"Play via Xbox Cloud Gaming"},
+    {name:"Madden 25",type:"cloud",genre:"Sports",note:"Play via Xbox Cloud Gaming"},
+    {name:"Skate 3",type:"cloud",genre:"Sports",note:"Play via Xbox Cloud Gaming"},
+    {name:"Riders Republic",type:"cloud",genre:"Sports",note:"Play via Xbox Cloud Gaming"},
+    {name:"Microsoft Flight Simulator 2024",type:"cloud",genre:"Sim",note:"Play via Xbox Cloud Gaming"},
+    {name:"Avatar Frontiers of Pandora",type:"cloud",genre:"Action",note:"Play via Xbox Cloud Gaming"},
+    {name:"EA Sports College Football 25",type:"cloud",genre:"Sports",note:"Play via Xbox Cloud Gaming"},
   ];
 
+  // Deduplicate by name
+  const seen = new Set();
+  const uniqueGames = games.filter(g => {
+    if (seen.has(g.name.toLowerCase())) return false;
+    seen.add(g.name.toLowerCase());
+    return true;
+  });
+
   let filter = 'all';
+  let recentlyViewed = JSON.parse(localStorage.getItem('lgc_recent') || '[]');
+
+  // Build genre dropdown
+  const genres = [...new Set(uniqueGames.map(g => g.genre))].sort();
+  const genreSelect = document.getElementById('genre-filter');
+  genres.forEach(g => {
+    const opt = document.createElement('option');
+    opt.value = g; opt.textContent = g;
+    genreSelect.appendChild(opt);
+  });
 
   function toggleTheme() {
     const html = document.documentElement;
@@ -390,37 +662,94 @@
     render();
   }
 
-  function render() {
-    const q = document.getElementById('search').value.toLowerCase();
-    const filtered = games.filter(g => {
-      const matchQ = g.name.toLowerCase().includes(q) || g.genre.toLowerCase().includes(q);
-      const matchF = filter === 'all' || g.type === filter;
-      return matchQ && matchF;
+  function setFilterById(f) {
+    filter = f;
+    document.querySelectorAll('.filter-btn').forEach(b => {
+      b.classList.toggle('active', b.textContent.toLowerCase().includes(f) || (f === 'all' && b.textContent === 'All'));
     });
-    const counts = {native:0,proton:0,blocked:0,cloud:0};
-    games.forEach(g => counts[g.type]++);
-    document.getElementById('s-native').textContent = counts.native;
-    document.getElementById('s-proton').textContent = counts.proton;
-    document.getElementById('s-cloud').textContent = counts.cloud;
-    document.getElementById('s-blocked').textContent = counts.blocked;
-    const labels = {native:'Native',proton:'Via Proton',blocked:'Blocked',cloud:'Cloud only'};
-    if (!filtered.length) {
-      document.getElementById('grid').innerHTML = '<div class="empty">No games found — try searching something else</div>';
-      return;
-    }
-    document.getElementById('grid').innerHTML = filtered.map(g => `
-      <div class="card">
+    render();
+  }
+
+  function addRecent(game) {
+    recentlyViewed = [game, ...recentlyViewed.filter(g => g.name !== game.name)].slice(0, 6);
+    try { localStorage.setItem('lgc_recent', JSON.stringify(recentlyViewed)); } catch(e) {}
+    renderRecent();
+  }
+
+  function copyGameLink(name, btn) {
+    const url = window.location.href.split('?')[0] + '?q=' + encodeURIComponent(name);
+    navigator.clipboard.writeText(url).then(() => {
+      btn.textContent = 'Copied!';
+      btn.classList.add('copied');
+      setTimeout(() => { btn.textContent = 'Copy link'; btn.classList.remove('copied'); }, 2000);
+    });
+  }
+
+  function cardHTML(g, labels) {
+    return `
+      <div class="card" onclick="addRecent(${JSON.stringify(g).replace(/"/g,'&quot;')})">
         <div class="card-top">
           <div class="card-name">${g.name}</div>
           <span class="badge ${g.type}">${labels[g.type]}</span>
         </div>
         <div class="card-genre">${g.genre}</div>
         <div class="card-note">${g.note}</div>
-      </div>
-    `).join('');
+        <div class="card-actions">
+          <button class="copy-btn" onclick="event.stopPropagation();copyGameLink('${g.name.replace(/'/g,"\\'")}',this)">Copy link</button>
+        </div>
+      </div>`;
   }
 
+  function renderRecent() {
+    const section = document.getElementById('recently-section');
+    const grid = document.getElementById('recently-grid');
+    if (!recentlyViewed.length) { section.style.display = 'none'; return; }
+    section.style.display = 'block';
+    const labels = {native:'Native',proton:'Via Proton',blocked:'Blocked',cloud:'Cloud only'};
+    grid.innerHTML = recentlyViewed.map(g => cardHTML(g, labels)).join('');
+  }
+
+  function render() {
+    const q = document.getElementById('search').value.toLowerCase();
+    const genreVal = document.getElementById('genre-filter').value;
+    const sortVal = document.getElementById('sort-select').value;
+
+    let filtered = uniqueGames.filter(g => {
+      const matchQ = g.name.toLowerCase().includes(q) || g.genre.toLowerCase().includes(q);
+      const matchF = filter === 'all' || g.type === filter;
+      const matchG = genreVal === 'all' || g.genre === genreVal;
+      return matchQ && matchF && matchG;
+    });
+
+    if (sortVal === 'az') filtered.sort((a,b) => a.name.localeCompare(b.name));
+    if (sortVal === 'za') filtered.sort((a,b) => b.name.localeCompare(a.name));
+
+    const counts = {native:0,proton:0,blocked:0,cloud:0};
+    uniqueGames.forEach(g => counts[g.type]++);
+    document.getElementById('s-native').textContent = counts.native;
+    document.getElementById('s-proton').textContent = counts.proton;
+    document.getElementById('s-cloud').textContent = counts.cloud;
+    document.getElementById('s-blocked').textContent = counts.blocked;
+    document.getElementById('result-count').textContent = `${filtered.length} game${filtered.length !== 1 ? 's' : ''} found`;
+
+    const labels = {native:'Native',proton:'Via Proton',blocked:'Blocked',cloud:'Cloud only'};
+
+    if (!filtered.length) {
+      document.getElementById('grid').innerHTML = '<div class="empty">No games found — try searching something else</div>';
+      return;
+    }
+
+    document.getElementById('grid').innerHTML = filtered.map(g => cardHTML(g, labels)).join('');
+  }
+
+  // Handle URL query param
+  const urlParams = new URLSearchParams(window.location.search);
+  if (urlParams.get('q')) document.getElementById('search').value = urlParams.get('q');
+
+  renderRecent();
   render();
 </script>
+</body>
+</html>
 </body>
 </html>
