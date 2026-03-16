@@ -26,14 +26,15 @@
     .header-left h1 span { color: var(--accent); }
     .header-left p { color: var(--muted); font-size: 0.95rem; }
     .header-right { display: flex; gap: 8px; flex-wrap: wrap; }
-    .toggle-btn { background: var(--toggle-bg); border: 1px solid var(--border); border-radius: 99px; padding: 6px 14px; cursor: pointer; font-size: 13px; color: var(--text); font-family: 'Inter', sans-serif; display: flex; align-items: center; gap: 6px; transition: all 0.15s; white-space: nowrap; }
+    .toggle-btn { background: var(--toggle-bg); border: 1px solid var(--border); border-radius: 99px; padding: 6px 14px; cursor: pointer; font-size: 13px; color: var(--text); font-family: 'Inter', sans-serif; transition: all 0.15s; white-space: nowrap; }
     .toggle-btn:hover { border-color: var(--accent); }
+    .toggle-btn.accent { background: var(--accent); border-color: var(--accent); color: #fff; }
     .search-row { display: flex; gap: 10px; margin-bottom: 1rem; }
     .search-row input { flex: 1; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 11px 16px; color: var(--text); font-size: 15px; font-family: 'Inter', sans-serif; outline: none; transition: border-color 0.2s; }
     .search-row input:focus { border-color: var(--accent); }
     .search-row input::placeholder { color: var(--muted); }
     .controls-row { display: flex; gap: 10px; margin-bottom: 1.25rem; flex-wrap: wrap; align-items: center; }
-    select { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 8px 14px; color: var(--text); font-size: 13px; font-family: 'Inter', sans-serif; outline: none; cursor: pointer; transition: border-color 0.2s; }
+    select { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 8px 14px; color: var(--text); font-size: 13px; font-family: 'Inter', sans-serif; outline: none; cursor: pointer; }
     select:hover { border-color: var(--accent); }
     .result-count { font-size: 13px; color: var(--muted); margin-left: auto; }
     .filters { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 1.75rem; }
@@ -51,7 +52,7 @@
     .stat-card.blocked .stat-num { color: var(--blocked); }
     .section-title { font-size: 13px; color: var(--muted); margin-bottom: 10px; font-weight: 500; }
     .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)); gap: 10px; }
-    .card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 16px; transition: border-color 0.15s; position: relative; }
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 16px; transition: border-color 0.15s; }
     .card:hover { border-color: var(--muted); }
     .card-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 6px; gap: 8px; }
     .card-name { font-size: 15px; font-weight: 500; color: var(--text); }
@@ -61,13 +62,26 @@
     .badge.blocked { background: rgba(239,68,68,0.15); color: var(--blocked); }
     .badge.cloud { background: rgba(245,158,11,0.15); color: var(--cloud); }
     .card-genre { font-size: 12px; color: var(--muted); margin-bottom: 6px; }
-    .card-note { font-size: 12px; color: var(--card-note); }
-    .card-actions { display: flex; gap: 6px; margin-top: 10px; }
-    .copy-btn { font-size: 11px; padding: 3px 10px; border-radius: 99px; border: 1px solid var(--border); background: transparent; color: var(--muted); cursor: pointer; font-family: 'Inter', sans-serif; transition: all 0.15s; }
-    .copy-btn:hover { border-color: var(--accent); color: var(--accent); }
-    .copy-btn.copied { border-color: var(--native); color: var(--native); }
+    .card-note { font-size: 12px; color: var(--card-note); margin-bottom: 10px; }
+    .card-actions { display: flex; gap: 6px; flex-wrap: wrap; }
+    .action-btn { font-size: 11px; padding: 3px 10px; border-radius: 99px; border: 1px solid var(--border); background: transparent; color: var(--muted); cursor: pointer; font-family: 'Inter', sans-serif; transition: all 0.15s; }
+    .action-btn:hover { border-color: var(--accent); color: var(--accent); }
+    .action-btn.fav-active { border-color: #f43f5e; color: #f43f5e; background: rgba(244,63,94,0.1); }
+    .action-btn.own-active { border-color: var(--native); color: var(--native); background: rgba(34,197,94,0.1); }
+    .action-btn.copied { border-color: var(--native); color: var(--native); }
     .empty { text-align: center; padding: 4rem; color: var(--muted); font-size: 14px; grid-column: 1/-1; }
     .recently-section { margin-bottom: 2rem; }
+    .suggest-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 100; align-items: center; justify-content: center; }
+    .suggest-modal.open { display: flex; }
+    .suggest-box { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 24px; width: 100%; max-width: 400px; margin: 1rem; }
+    .suggest-box h2 { font-size: 18px; font-weight: 500; margin-bottom: 16px; }
+    .suggest-box input, .suggest-box select { width: 100%; background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 10px 14px; color: var(--text); font-size: 14px; font-family: 'Inter', sans-serif; outline: none; margin-bottom: 10px; }
+    .suggest-box input:focus, .suggest-box select:focus { border-color: var(--accent); }
+    .suggest-btns { display: flex; gap: 8px; margin-top: 6px; }
+    .suggest-btns button { flex: 1; padding: 10px; border-radius: 10px; border: 1px solid var(--border); cursor: pointer; font-family: 'Inter', sans-serif; font-size: 14px; }
+    .suggest-btns .submit-btn { background: var(--accent); border-color: var(--accent); color: #fff; }
+    .suggest-btns .cancel-btn { background: transparent; color: var(--muted); }
+    .success-msg { font-size: 13px; color: var(--native); margin-top: 8px; display: none; }
     footer { margin-top: 3rem; text-align: center; color: var(--muted); font-size: 12px; }
     footer a { color: var(--accent); text-decoration: none; }
     @media (max-width: 500px) {
@@ -85,6 +99,7 @@
     </div>
     <div class="header-right">
       <button class="toggle-btn" onclick="toggleTheme()" id="theme-btn">☀️ Light mode</button>
+      <button class="toggle-btn" onclick="openSuggest()">+ Suggest game</button>
     </div>
   </header>
 
@@ -93,14 +108,14 @@
   </div>
 
   <div class="controls-row">
-    <select id="genre-filter" onchange="render()">
-      <option value="all">All genres</option>
-    </select>
+    <select id="genre-filter" onchange="render()"><option value="all">All genres</option></select>
     <select id="sort-select" onchange="render()">
       <option value="default">Default order</option>
       <option value="az">A → Z</option>
       <option value="za">Z → A</option>
     </select>
+    <button class="toggle-btn" id="fav-filter-btn" onclick="toggleFavFilter()" style="font-size:13px;">♡ Favourites</button>
+    <button class="toggle-btn" id="own-filter-btn" onclick="toggleOwnFilter()" style="font-size:13px;">✓ Owned</button>
     <span class="result-count" id="result-count"></span>
   </div>
 
@@ -130,6 +145,26 @@
   <footer>
     <p>Built by <a href="https://github.com/SiLXNCE-iS-HiM" target="_blank">SiLXNCE-iS-HiM</a> &mdash; data sourced from <a href="https://www.protondb.com" target="_blank">ProtonDB</a></p>
   </footer>
+</div>
+
+<!-- Suggest Modal -->
+<div class="suggest-modal" id="suggest-modal">
+  <div class="suggest-box">
+    <h2>Suggest a game</h2>
+    <input type="text" id="suggest-name" placeholder="Game name" />
+    <select id="suggest-type">
+      <option value="native">Native</option>
+      <option value="proton">Via Proton</option>
+      <option value="cloud">Cloud only</option>
+      <option value="blocked">Blocked</option>
+    </select>
+    <input type="text" id="suggest-genre" placeholder="Genre (e.g. FPS, RPG)" />
+    <div class="suggest-btns">
+      <button class="cancel-btn" onclick="closeSuggest()">Cancel</button>
+      <button class="submit-btn" onclick="submitSuggest()">Submit</button>
+    </div>
+    <div class="success-msg" id="suggest-success">Thanks! Suggestion saved ✅</div>
+  </div>
 </div>
 
 <script>
@@ -556,7 +591,7 @@
     {name:"Roblox",type:"blocked",genre:"Sandbox",note:"No official Linux support"},
     {name:"Overwatch 2",type:"blocked",genre:"FPS",note:"Anti-cheat blocks Linux"},
     {name:"Splitgate",type:"blocked",genre:"FPS",note:"Anti-cheat blocks Linux"},
-    {name:"Warhammer 40K Darktide",type:"cloud",genre:"Co-op",note:"Play via Xbox cloud gaming"},
+    {name:"Warhammer 40K Darktide",type:"blocked",genre:"Co-op",note:"Anti-cheat blocks Linux"},
     {name:"The Finals",type:"blocked",genre:"FPS",note:"Anti-cheat blocks Linux"},
     {name:"Call of Duty Warzone",type:"blocked",genre:"FPS",note:"Anti-cheat blocks Linux"},
     {name:"Call of Duty Black Ops 4",type:"blocked",genre:"FPS",note:"Anti-cheat blocks Linux"},
@@ -584,8 +619,6 @@
     {name:"Suicide Squad Kill the Justice League",type:"blocked",genre:"Action",note:"Anti-cheat blocks Linux"},
     {name:"Battlefield 3",type:"blocked",genre:"FPS",note:"EA anti-cheat blocks Linux"},
     {name:"Battlefield 4",type:"blocked",genre:"FPS",note:"EA anti-cheat blocks Linux"},
-    {name:"Battlefield 1",type:"cloud",genre:"FPS",note:"Play via Xbox Cloud Gaming"},
-    {name:"Battlefield 5",type:"cloud",genre:"FPS",note:"Play Via Xbox Cloud Gaming"},
     {name:"Gran Turismo 7",type:"blocked",genre:"Racing",note:"PlayStation exclusive — no Linux support"},
     {name:"eFootball 2025",type:"blocked",genre:"Sports",note:"Anti-cheat blocks Linux"},
     {name:"Advance Wars Reboot Camp",type:"blocked",genre:"Turn Based Strategy",note:"Nintendo exclusive — no Linux"},
@@ -598,6 +631,8 @@
     {name:"Rainbow Six Siege",type:"cloud",genre:"FPS",note:"Play via Xbox Cloud Gaming"},
     {name:"Battlefield 2042",type:"cloud",genre:"FPS",note:"Play via Xbox Cloud Gaming"},
     {name:"Battlefield 6",type:"cloud",genre:"FPS",note:"Play via Xbox Cloud Gaming"},
+    {name:"Battlefield 1",type:"cloud",genre:"FPS",note:"Play via Xbox Cloud Gaming"},
+    {name:"Battlefield 5",type:"cloud",genre:"FPS",note:"Play via Xbox Cloud Gaming"},
     {name:"Halo Infinite",type:"cloud",genre:"FPS",note:"Play via Xbox Cloud Gaming"},
     {name:"Sea of Thieves",type:"cloud",genre:"Adventure",note:"Play via Xbox Cloud Gaming"},
     {name:"It Takes Two",type:"cloud",genre:"Co-op",note:"Play via Xbox Cloud Gaming"},
@@ -628,7 +663,7 @@
     {name:"EA Sports College Football 25",type:"cloud",genre:"Sports",note:"Play via Xbox Cloud Gaming"},
   ];
 
-  // Deduplicate by name
+  // Deduplicate
   const seen = new Set();
   const uniqueGames = games.filter(g => {
     if (seen.has(g.name.toLowerCase())) return false;
@@ -636,8 +671,35 @@
     return true;
   });
 
+  // State
   let filter = 'all';
-  let recentlyViewed = JSON.parse(localStorage.getItem('lgc_recent') || '[]');
+  let showFavOnly = false;
+  let showOwnOnly = false;
+  let recentlyViewed = [];
+  let favourites = new Set();
+  let owned = new Set();
+  let suggestions = [];
+
+  // Load from localStorage
+  try {
+    const savedFavs = localStorage.getItem('lgc_favs');
+    const savedOwn = localStorage.getItem('lgc_owned');
+    const savedRecent = localStorage.getItem('lgc_recent');
+    const savedSuggestions = localStorage.getItem('lgc_suggestions');
+    if (savedFavs) favourites = new Set(JSON.parse(savedFavs));
+    if (savedOwn) owned = new Set(JSON.parse(savedOwn));
+    if (savedRecent) recentlyViewed = JSON.parse(savedRecent);
+    if (savedSuggestions) suggestions = JSON.parse(savedSuggestions);
+  } catch(e) {}
+
+  function save() {
+    try {
+      localStorage.setItem('lgc_favs', JSON.stringify([...favourites]));
+      localStorage.setItem('lgc_owned', JSON.stringify([...owned]));
+      localStorage.setItem('lgc_recent', JSON.stringify(recentlyViewed));
+      localStorage.setItem('lgc_suggestions', JSON.stringify(suggestions));
+    } catch(e) {}
+  }
 
   // Build genre dropdown
   const genres = [...new Set(uniqueGames.map(g => g.genre))].sort();
@@ -665,18 +727,58 @@
   function setFilterById(f) {
     filter = f;
     document.querySelectorAll('.filter-btn').forEach(b => {
-      b.classList.toggle('active', b.textContent.toLowerCase().includes(f) || (f === 'all' && b.textContent === 'All'));
+      const matches = (f === 'all' && b.textContent === 'All') ||
+        b.textContent.toLowerCase().replace(' ', '').includes(f.replace(' ',''));
+      b.classList.toggle('active', matches);
     });
     render();
   }
 
-  function addRecent(game) {
-    recentlyViewed = [game, ...recentlyViewed.filter(g => g.name !== game.name)].slice(0, 6);
-    try { localStorage.setItem('lgc_recent', JSON.stringify(recentlyViewed)); } catch(e) {}
-    renderRecent();
+  function toggleFavFilter() {
+    showFavOnly = !showFavOnly;
+    showOwnOnly = false;
+    document.getElementById('fav-filter-btn').classList.toggle('accent', showFavOnly);
+    document.getElementById('own-filter-btn').classList.remove('accent');
+    render();
   }
 
-  function copyGameLink(name, btn) {
+  function toggleOwnFilter() {
+    showOwnOnly = !showOwnOnly;
+    showFavOnly = false;
+    document.getElementById('own-filter-btn').classList.toggle('accent', showOwnOnly);
+    document.getElementById('fav-filter-btn').classList.remove('accent');
+    render();
+  }
+
+  function toggleFav(name, btn) {
+    if (favourites.has(name)) {
+      favourites.delete(name);
+      btn.textContent = '♡ Favourite';
+      btn.classList.remove('fav-active');
+    } else {
+      favourites.add(name);
+      btn.textContent = '♥ Favourited';
+      btn.classList.add('fav-active');
+    }
+    save();
+    if (showFavOnly) render();
+  }
+
+  function toggleOwn(name, btn) {
+    if (owned.has(name)) {
+      owned.delete(name);
+      btn.textContent = '✓ I own this';
+      btn.classList.remove('own-active');
+    } else {
+      owned.add(name);
+      btn.textContent = '✓ Owned';
+      btn.classList.add('own-active');
+    }
+    save();
+    if (showOwnOnly) render();
+  }
+
+  function copyLink(name, btn) {
     const url = window.location.href.split('?')[0] + '?q=' + encodeURIComponent(name);
     navigator.clipboard.writeText(url).then(() => {
       btn.textContent = 'Copied!';
@@ -685,9 +787,19 @@
     });
   }
 
-  function cardHTML(g, labels) {
+  function addRecent(name) {
+    recentlyViewed = [name, ...recentlyViewed.filter(n => n !== name)].slice(0, 6);
+    save();
+    renderRecent();
+  }
+
+  function cardHTML(g) {
+    const labels = {native:'Native',proton:'Via Proton',blocked:'Blocked',cloud:'Cloud only'};
+    const isFav = favourites.has(g.name);
+    const isOwned = owned.has(g.name);
+    const safeName = g.name.replace(/'/g, "\\'").replace(/"/g, '&quot;');
     return `
-      <div class="card" onclick="addRecent(${JSON.stringify(g).replace(/"/g,'&quot;')})">
+      <div class="card" onclick="addRecent('${safeName}')">
         <div class="card-top">
           <div class="card-name">${g.name}</div>
           <span class="badge ${g.type}">${labels[g.type]}</span>
@@ -695,7 +807,9 @@
         <div class="card-genre">${g.genre}</div>
         <div class="card-note">${g.note}</div>
         <div class="card-actions">
-          <button class="copy-btn" onclick="event.stopPropagation();copyGameLink('${g.name.replace(/'/g,"\\'")}',this)">Copy link</button>
+          <button class="action-btn ${isFav ? 'fav-active' : ''}" onclick="event.stopPropagation();toggleFav('${safeName}',this)">${isFav ? '♥ Favourited' : '♡ Favourite'}</button>
+          <button class="action-btn ${isOwned ? 'own-active' : ''}" onclick="event.stopPropagation();toggleOwn('${safeName}',this)">${isOwned ? '✓ Owned' : '✓ I own this'}</button>
+          <button class="action-btn" onclick="event.stopPropagation();copyLink('${safeName}',this)">Copy link</button>
         </div>
       </div>`;
   }
@@ -705,8 +819,8 @@
     const grid = document.getElementById('recently-grid');
     if (!recentlyViewed.length) { section.style.display = 'none'; return; }
     section.style.display = 'block';
-    const labels = {native:'Native',proton:'Via Proton',blocked:'Blocked',cloud:'Cloud only'};
-    grid.innerHTML = recentlyViewed.map(g => cardHTML(g, labels)).join('');
+    const recentGames = recentlyViewed.map(name => uniqueGames.find(g => g.name === name)).filter(Boolean);
+    grid.innerHTML = recentGames.map(g => cardHTML(g)).join('');
   }
 
   function render() {
@@ -718,7 +832,9 @@
       const matchQ = g.name.toLowerCase().includes(q) || g.genre.toLowerCase().includes(q);
       const matchF = filter === 'all' || g.type === filter;
       const matchG = genreVal === 'all' || g.genre === genreVal;
-      return matchQ && matchF && matchG;
+      const matchFav = !showFavOnly || favourites.has(g.name);
+      const matchOwn = !showOwnOnly || owned.has(g.name);
+      return matchQ && matchF && matchG && matchFav && matchOwn;
     });
 
     if (sortVal === 'az') filtered.sort((a,b) => a.name.localeCompare(b.name));
@@ -732,24 +848,43 @@
     document.getElementById('s-blocked').textContent = counts.blocked;
     document.getElementById('result-count').textContent = `${filtered.length} game${filtered.length !== 1 ? 's' : ''} found`;
 
-    const labels = {native:'Native',proton:'Via Proton',blocked:'Blocked',cloud:'Cloud only'};
-
     if (!filtered.length) {
       document.getElementById('grid').innerHTML = '<div class="empty">No games found — try searching something else</div>';
       return;
     }
 
-    document.getElementById('grid').innerHTML = filtered.map(g => cardHTML(g, labels)).join('');
+    document.getElementById('grid').innerHTML = filtered.map(g => cardHTML(g)).join('');
   }
 
-  // Handle URL query param
+  // Suggest modal
+  function openSuggest() {
+    document.getElementById('suggest-modal').classList.add('open');
+  }
+
+  function closeSuggest() {
+    document.getElementById('suggest-modal').classList.remove('open');
+    document.getElementById('suggest-success').style.display = 'none';
+    document.getElementById('suggest-name').value = '';
+    document.getElementById('suggest-genre').value = '';
+  }
+
+  function submitSuggest() {
+    const name = document.getElementById('suggest-name').value.trim();
+    const type = document.getElementById('suggest-type').value;
+    const genre = document.getElementById('suggest-genre').value.trim();
+    if (!name || !genre) return;
+    suggestions.push({name, type, genre, date: new Date().toLocaleDateString()});
+    save();
+    document.getElementById('suggest-success').style.display = 'block';
+    setTimeout(() => closeSuggest(), 1500);
+  }
+
+  // URL params
   const urlParams = new URLSearchParams(window.location.search);
   if (urlParams.get('q')) document.getElementById('search').value = urlParams.get('q');
 
   renderRecent();
   render();
 </script>
-</body>
-</html>
 </body>
 </html>
