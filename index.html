@@ -51,12 +51,15 @@
     }
     .search-row input:focus { border-color: var(--accent); }
 
+    /* --- THE SCROLL FIX IS HERE --- */
     .grid { 
       display: grid; 
       grid-template-columns: repeat(4, 1fr); 
       gap: 14px; 
       overflow-y: auto;
       padding-right: 10px;
+      flex: 1; /* This makes the grid fill the space */
+      min-height: 0; /* Critical for flex scrolling */
     }
 
     .card { 
