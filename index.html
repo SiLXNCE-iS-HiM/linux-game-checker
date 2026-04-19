@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Linux Game Checker</title>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #0f0f0f; --surface: #1a1a1a; --border: #2a2a2a;
+      --text: #e8e8e8; --muted: #888; --accent: #7c6aff;
+      --native: #22c55e; --proton: #3b82f6; --blocked: #ef4444;
+    }
+
+    body { 
+      background: var(--bg); 
+      color: var(--text); 
+      font-family: 'Inter', sans-serif; 
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    .container-16-9 {
+      width: 98vw;
+      aspect-ratio: 16 / 9;
+      background: var(--bg);
+      padding: 3.5rem;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header { margin-bottom: 2rem; }
+    h1 { font-family: 'JetBrains Mono', monospace; font-size: 1.4rem; font-weight: 500; text-transform: lowercase; }
+    h1 span { color: var(--accent); }
+
+    .search-row input { 
+      width: 100%; 
+      background: var(--surface); 
+      border: 1px solid var(--border); 
+      border-radius: 8px; 
+      padding: 16px 24px; 
+      color: var(--text); 
+      font-size: 16px; 
+      outline: none; 
+      transition: border-color 0.2s; 
+      margin-bottom: 2.5rem;
+    }
+    .search-row input:focus { border-color: var(--accent); }
+
+    .grid { 
+      display: grid; 
+      grid-template-columns: repeat(4, 1fr); 
+      gap: 14px; 
+      overflow-y: auto;
+      padding-right: 10px;
+    }
+
+    .card { 
+      background: var(--surface); 
+      border: 1px solid var(--border); 
+      border-radius: 10px; 
+      padding: 12px 20px; 
+      display: flex;
+      align-items: center; 
+      justify-content: space-between;
+      transition: all 0.2s ease;
+      height: 64px;
+    }
+    .card:hover { border-color: var(--accent); background: #222; }
+
+    .card-name { font-size: 13px; font-weight: 500; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding-right: 10px; }
+    
+    .badge { 
+      font-size: 9px; 
+      font-weight: 600; 
+      padding: 3px 10px; 
+      border-radius: 6px; 
+      text-transform: lowercase;
+      flex-shrink: 0;
+    }
+    .badge.native { background: rgba(34,197,94,0.1); color: var(--native); }
+    .badge.proton { background: rgba(59,130,246,0.1); color: var(--proton); }
+    .badge.blocked { background: rgba(239,68,68,0.1); color: var(--blocked); }
+
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
+  </style>
+</head>
+<body>
+
+<div class="container-16-9">
+  <header>
+    <h1>linux <span>game</span> checker</h1>
+    <p style="color: var(--muted); font-size: 11px; margin-top: 4px;">v1.0.0-beta</p>
+  </header>
+
+  <div class="search-row">
+    <input type="text" id="search" placeholder="search library..." />
+  </div>
+
+  <div id="grid" class="grid"></div>
+
+  <footer style="margin-top: auto; padding-top: 2rem; color: #333; font-size: 10px; letter-spacing: 1px;">
+    DATA_SOURCE: PROTONDB // BUILD: RECOVERED_NODE
+  </footer>
+</div>
+
+<script>
+  const games = [
+    { name: "Counter-Strike 2", type: "native" },
+    { name: "Dota 2", type: "native" },
+    { name: "Grand Theft Auto V", type: "proton" },
+    { name: "Elden Ring", type: "proton" },
+    { name: "Cyberpunk 2077", type: "proton" },
+    { name: "Stardew Valley", type: "native" },
+    { name: "Terraria", type: "native" },
+    { name: "Destiny 2", type: "blocked" },
+    { name: "Apex Legends", type: "proton" },
+    { name: "Valheim", type: "native" },
+    { name: "Hades", type: "native" },
+    { name: "Rust", type: "native" },
+    { name: "Portal 2", type: "native" },
+    { name: "Balatro", type: "native" },
+    { name: "Minecraft", type: "native" },
+    { name: "The Witcher 3: Wild Hunt", type: "proton" },
+    { name: "Red Dead Redemption 2", type: "proton" },
+    { name: "Baldur's Gate 3", type: "proton" },
+    { name: "Team Fortress 2", type: "native" },
+    { name: "Left 4 Dead 2", type: "native" },
+    { name: "Garry's Mod", type: "native" },
+    { name: "Hollow Knight", type: "native" },
+    { name: "Risk of Rain 2", type: "proton" },
+    { name: "Subnautica", type: "proton" },
+    { name: "Factorio", type: "native" },
+    { name: "Unturned", type: "native" },
+    { name: "Phasmophobia", type: "proton" },
+    { name: "Warframe", type: "proton" },
+    { name: "Helldivers 2", type: "proton" },
+    { name: "Rainbow Six Siege", type: "blocked" },
+    { name: "Valorant", type: "blocked" },
+    { name: "League of Legends", type: "blocked" },
+    { name: "Roblox", type: "blocked" },
+    { name: "7 Days to Die", type: "native" },
+    { name: "Ark: Survival Evolved", type: "native" },
+    { name: "Hearts of Iron IV", type: "native" },
+    { name: "Cities: Skylines", type: "native" },
+    { name: "Euro Truck Simulator 2", type: "native" },
+    { name: "American Truck Simulator", type: "native" },
+    { name: "Project Zomboid", type: "native" },
+    { name: "Dead by Daylight", type: "proton" },
+    { name: "RimWorld", type: "native" },
+    { name: "Payday 2", type: "native" },
+    { name: "Deep Rock Galactic", type: "proton" },
+    { name: "Monster Hunter: World", type: "proton" },
+    { name: "Forza Horizon 5", type: "proton" },
+    { name: "Sea of Thieves", type: "proton" },
+    { name: "DayZ", type: "proton" },
+    { name: "No Man's Sky", type: "proton" },
+    { name: "The Sims 4", type: "proton" },
+    { name: "Palworld", type: "proton" },
+    { name: "Raft", type: "proton" },
+    { name: "V Rising", type: "proton" },
+    { name: "Geometry Dash", type: "proton" }
+  ];
+
+  const input = document.getElementById('search');
+  const grid = document.getElementById('grid');
+
+  function render(filter = "") {
+    grid.innerHTML = '';
+    const matches = games.filter(g => g.name.toLowerCase().includes(filter.toLowerCase()));
+
+    matches.forEach(g => {
+      const card = document.createElement('div');
+      card.className = "card";
+      card.innerHTML = `
+        <div class="card-name">${g.name}</div>
+        <div class="badge ${g.type}">${g.type}</div>
+      `;
+      grid.appendChild(card);
+    });
+  }
+
+  render();
+  input.addEventListener('input', (e) => render(e.target.value));
+</script>
+
+</body>
+</html>
